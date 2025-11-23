@@ -1,19 +1,17 @@
 package tests;
 
-import io.restassured.http.ContentType;
-import io.restassured.http.Header;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-public class RegisterTests {
-
-    Header header = new Header("x-api-key", "reqres-free-v1");
+public class RegisterTests extends TestBase{
 
 
     @Test
+    @DisplayName("Позитивная регистрация пользователя")
     void successfulRegisterTest() {
         String regData = "{\"email\": \"eve.holt@reqres.in\",\n" + "\"password\": \"cityslicka\"}";
 
@@ -24,7 +22,7 @@ public class RegisterTests {
                 .log().uri()
 
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
 
                 .then()
                 .log().status()
@@ -35,6 +33,7 @@ public class RegisterTests {
     }
 
     @Test
+    @DisplayName("При попытке регистрации с пустыми полями должна выводиться 400 ошибка с содержанием \"Empty request body\"")
     void emptyRegisterTest() {
         String regData = "";
 
@@ -45,7 +44,7 @@ public class RegisterTests {
                 .log().uri()
 
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
 
                 .then()
                 .log().status()
@@ -56,6 +55,7 @@ public class RegisterTests {
     }
 
     @Test
+    @DisplayName("При попытке регистрации без указания пароля должна выводиться 400 ошибка с содержанием \"Missing password\"")
     void notPassswordRegisterTest() {
         String regData = "{\"email\": \"sydney@fife\"}";
 
@@ -66,7 +66,7 @@ public class RegisterTests {
                 .log().uri()
 
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
 
                 .then()
                 .log().status()
@@ -74,5 +74,4 @@ public class RegisterTests {
                 .statusCode(400)
                 .body("error", is("Missing password"));
     }
-
 }

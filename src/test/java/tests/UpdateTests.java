@@ -1,6 +1,6 @@
 package tests;
 
-import io.restassured.http.Header;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -8,11 +8,11 @@ import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class UpdateTests {
+public class UpdateTests extends TestBase {
 
-    Header header = new Header("x-api-key", "reqres-free-v1");
 
     @Test
+    @DisplayName("Успешное редактирование данных пользователя")
     void successfulUpdateTest() {
         String regData = "{\"name\": \"morpheus\",\n" + " \"job\": \"zion resident\"}";
 
@@ -23,7 +23,7 @@ public class UpdateTests {
                 .log().uri()
 
                 .when()
-                .patch("https://reqres.in/api/users/2")
+                .patch("/users/2")
 
                 .then()
                 .log().status()

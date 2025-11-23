@@ -1,6 +1,6 @@
 package tests;
 
-import io.restassured.http.Header;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -8,10 +8,11 @@ import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class CreateTests {
-    Header header = new Header("x-api-key", "reqres-free-v1");
+public class CreateTests extends TestBase{
+
 
     @Test
+    @DisplayName("Позитивное создание нового пользователя")
     void successfulCreateTest() {
         String regData = "{\"name\": \"morpheus\",\n" + "\"job\": \"leader\"}";
 
@@ -22,7 +23,7 @@ public class CreateTests {
                 .log().uri()
 
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
 
                 .then()
                 .log().status()
@@ -35,6 +36,7 @@ public class CreateTests {
     }
 
     @Test
+    @DisplayName("При попытке регистрации с пустыми полями должна выводиться 400 ошибка с содержанием \"Empty request body\"")
     void emptyCreateTest() {
 
         given()
@@ -43,7 +45,7 @@ public class CreateTests {
                 .log().uri()
 
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
 
                 .then()
                 .log().status()
