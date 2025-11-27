@@ -2,6 +2,7 @@ package tests;
 
 import models.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 
@@ -15,6 +16,7 @@ public class CreateTests extends TestBase{
 
 
     @Test
+    @Tag("reqres")
     @DisplayName("Позитивное создание нового пользователя")
     void successfulCreateTest() {
 
@@ -43,6 +45,7 @@ public class CreateTests extends TestBase{
     }
 
     @Test
+    @Tag("reqres")
     @DisplayName("При попытке регистрации с пустыми полями должна выводиться 400 ошибка с содержанием \"Empty request body\"")
     void emptyCreateTest() {
 

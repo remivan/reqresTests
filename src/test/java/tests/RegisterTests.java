@@ -5,6 +5,7 @@ import models.RegistrationErrorModel;
 import models.RegistrationBodyModel;
 import models.RegistrationResponseModel;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
@@ -16,6 +17,7 @@ public class RegisterTests extends TestBase{
 
 
     @Test
+    @Tag("reqres")
     @DisplayName("Позитивная регистрация пользователя")
     void successfulRegisterTest() {
 
@@ -42,6 +44,7 @@ public class RegisterTests extends TestBase{
     }
 
     @Test
+    @Tag("reqres")
     @DisplayName("При попытке регистрации с пустыми полями должна выводиться 400 ошибка с содержанием \"Empty request body\"")
     void emptyRegisterTest() {
 
@@ -62,6 +65,7 @@ public class RegisterTests extends TestBase{
     }
 
     @Test
+    @Tag("reqres")
     @DisplayName("При попытке регистрации без указания пароля должна выводиться 400 ошибка с содержанием \"Missing password\"")
     void notPassswordRegisterTest() {
 

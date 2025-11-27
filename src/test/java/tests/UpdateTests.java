@@ -4,6 +4,7 @@ package tests;
 import models.UpdateBodyModel;
 import models.UpdateResponseModel;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 
@@ -18,6 +19,7 @@ public class UpdateTests extends TestBase {
 
 
     @Test
+    @Tag("reqres")
     @DisplayName("Успешное редактирование данных пользователя")
     void successfulUpdateTest() {
 
