@@ -1,12 +1,15 @@
 package tests;
 
+import models.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static specs.CreateSpec.*;
 
 public class CreateTests extends TestBase{
 
@@ -14,44 +17,48 @@ public class CreateTests extends TestBase{
     @Test
     @DisplayName("Позитивное создание нового пользователя")
     void successfulCreateTest() {
-        String regData = "{\"name\": \"morpheus\",\n" + "\"job\": \"leader\"}";
 
-        given()
-                .header(header)
-                .body(regData)
-                .contentType(JSON)
-                .log().uri()
+        CreateBodyModel createData = new CreateBodyModel();
+        createData.setName("morpheus");
+        createData.setJob("leader");
+
+        CreateResponseModel response = step("Make request", ()->
+                given(createRequestSpec)
+                .body(createData)
+
 
                 .when()
                 .post("/users")
 
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(201)
-                .body("name", is("morpheus"))
-                .body("job", is("leader"))
-                .body("id", notNullValue())
-                .body("createdAt", notNullValue());
+                .spec(createResponseSpec)
+                .extract().as(CreateResponseModel.class));
+
+        step("Check response", ()-> {
+            assertEquals("morpheus", response.getName());
+            assertEquals("leader", response.getJob());
+            assertNotNull(response.getId());
+            assertNotNull(response.getCreatedAt());
+        });
     }
 
     @Test
     @DisplayName("При попытке регистрации с пустыми полями должна выводиться 400 ошибка с содержанием \"Empty request body\"")
     void emptyCreateTest() {
 
-        given()
-                .header(header)
-                .contentType(JSON)
-                .log().uri()
+        CreateErrorModel response = step("Make request", ()->
+                given(createRequestSpec)
 
                 .when()
                 .post("/users")
 
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(400)
-                .body("error", is("Empty request body"))
-                .body("message", is("Request body cannot be empty for JSON endpoints"));
+                .spec(createEmptyResponseSpec)
+                .extract().as(CreateErrorModel.class));
+
+        step("Check response", ()-> {
+            assertEquals("Empty request body", response.getError());
+            assertEquals("Request body cannot be empty for JSON endpoints", response.getMessage());
+        });
     }
 }
