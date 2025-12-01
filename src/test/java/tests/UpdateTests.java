@@ -1,7 +1,6 @@
 package tests;
 
 
-import models.CreateBodyModel;
 import models.UpdateBodyModel;
 import models.UpdateResponseModel;
 import org.junit.jupiter.api.DisplayName;
