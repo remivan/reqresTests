@@ -1,7 +1,6 @@
 package tests;
 
 
-import models.CreateBodyModel;
 import models.RegistrationErrorModel;
 import models.RegistrationBodyModel;
 import models.RegistrationResponseModel;

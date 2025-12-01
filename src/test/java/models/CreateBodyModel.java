@@ -6,6 +6,5 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class CreateBodyModel {
-
     String name, job;
 }

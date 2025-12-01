@@ -10,7 +10,8 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static specs.BaseSpecs.*;
+import static specs.BaseSpecs.requestSpec;
+import static specs.BaseSpecs.responseSpecification;
 
 public class CreateTests extends TestBase{
 
@@ -25,7 +26,6 @@ public class CreateTests extends TestBase{
         CreateResponseModel response = step("Make request", ()->
                 given(requestSpec)
                 .body(createData)
-
 
                 .when()
                 .post("/users")

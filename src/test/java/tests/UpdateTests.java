@@ -31,7 +31,6 @@ public class UpdateTests extends TestBase {
 
                 .body(updateData)
 
-
                 .when()
                 .patch("/users/2")
 
