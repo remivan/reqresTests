@@ -1,6 +1,7 @@
 package tests;
 
 
+import models.CreateBodyModel;
 import models.UpdateBodyModel;
 import models.UpdateResponseModel;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,9 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static specs.UpdateSpec.updateRequestSpec;
-import static specs.UpdateSpec.updateResponseSpec;
+import static specs.BaseSpecs.requestSpec;
+import static specs.BaseSpecs.responseSpecification;
+
 
 public class UpdateTests extends TestBase {
 
@@ -23,12 +25,10 @@ public class UpdateTests extends TestBase {
     @DisplayName("Успешное редактирование данных пользователя")
     void successfulUpdateTest() {
 
-        UpdateBodyModel updateData = new UpdateBodyModel();
-        updateData.setName("morpheus");
-        updateData.setJob("zion resident");
+        UpdateBodyModel updateData = new UpdateBodyModel("morpheus", "zion resident");
 
         UpdateResponseModel response = step("Make request", ()->
-                given(updateRequestSpec)
+                given(requestSpec)
 
                 .body(updateData)
 
@@ -37,7 +37,7 @@ public class UpdateTests extends TestBase {
                 .patch("/users/2")
 
                 .then()
-                .spec(updateResponseSpec)
+                .spec(responseSpecification(200))
                 .extract().as(UpdateResponseModel.class));
 
         step("Check response", ()-> {

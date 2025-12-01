@@ -1,6 +1,7 @@
 package tests;
 
 
+import models.CreateBodyModel;
 import models.RegistrationErrorModel;
 import models.RegistrationBodyModel;
 import models.RegistrationResponseModel;
@@ -11,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static specs.RegistrationSpec.*;
+import static specs.BaseSpecs.requestSpec;
+import static specs.BaseSpecs.responseSpecification;
 
 public class RegisterTests extends TestBase{
 
@@ -21,12 +23,10 @@ public class RegisterTests extends TestBase{
     @DisplayName("Позитивная регистрация пользователя")
     void successfulRegisterTest() {
 
-        RegistrationBodyModel regData = new RegistrationBodyModel();
-        regData.setEmail("eve.holt@reqres.in");
-        regData.setPassword("cityslicka");
+        RegistrationBodyModel regData = new RegistrationBodyModel("eve.holt@reqres.in", "cityslicka");
 
         RegistrationResponseModel response = step("Make request", ()->
-            given(registrationRequestSpec)
+            given(requestSpec)
                     .body(regData)
 
                     .when()
@@ -34,7 +34,7 @@ public class RegisterTests extends TestBase{
 
                     .then()
 
-                    .spec(registrationResponseSpec)
+                    .spec(responseSpecification(200))
                     .extract().as(RegistrationResponseModel.class));
 
         step("Check response", ()-> {
@@ -49,13 +49,13 @@ public class RegisterTests extends TestBase{
     void emptyRegisterTest() {
 
         RegistrationErrorModel response = step("Make request", ()->
-                given(registrationRequestSpec)
+                given(requestSpec)
 
                 .when()
                 .post("/register")
 
                 .then()
-                .spec(registrationEmptyResponseSpec)
+                .spec(responseSpecification(400))
                 .extract().as(RegistrationErrorModel.class));
 
         step("Check response", ()-> {
@@ -69,19 +69,17 @@ public class RegisterTests extends TestBase{
     @DisplayName("При попытке регистрации без указания пароля должна выводиться 400 ошибка с содержанием \"Missing password\"")
     void notPassswordRegisterTest() {
 
-        RegistrationBodyModel regData = new RegistrationBodyModel();
-        regData.setEmail("sydney@fife");
-        regData.setPassword("");
+        RegistrationBodyModel regData = new RegistrationBodyModel("sydney@fife", "");
 
         RegistrationErrorModel response = step("Make request", ()->
-                given(registrationRequestSpec)
+                given(requestSpec)
                 .body(regData)
 
                 .when()
                 .post("/register")
 
                 .then()
-                .spec(missingPasswordResponseSpec)
+                .spec(responseSpecification(400))
                 .extract().as(RegistrationErrorModel.class));
 
         step("Check response", ()-> {

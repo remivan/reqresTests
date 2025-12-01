@@ -10,7 +10,7 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static specs.CreateSpec.*;
+import static specs.BaseSpecs.*;
 
 public class CreateTests extends TestBase{
 
@@ -20,12 +20,10 @@ public class CreateTests extends TestBase{
     @DisplayName("Позитивное создание нового пользователя")
     void successfulCreateTest() {
 
-        CreateBodyModel createData = new CreateBodyModel();
-        createData.setName("morpheus");
-        createData.setJob("leader");
+        CreateBodyModel createData = new CreateBodyModel("morpheus", "leader");
 
         CreateResponseModel response = step("Make request", ()->
-                given(createRequestSpec)
+                given(requestSpec)
                 .body(createData)
 
 
@@ -33,7 +31,7 @@ public class CreateTests extends TestBase{
                 .post("/users")
 
                 .then()
-                .spec(createResponseSpec)
+                .spec(responseSpecification(201))
                 .extract().as(CreateResponseModel.class));
 
         step("Check response", ()-> {
@@ -50,13 +48,13 @@ public class CreateTests extends TestBase{
     void emptyCreateTest() {
 
         CreateErrorModel response = step("Make request", ()->
-                given(createRequestSpec)
+                given(requestSpec)
 
                 .when()
                 .post("/users")
 
                 .then()
-                .spec(createEmptyResponseSpec)
+                .spec(responseSpecification(400))
                 .extract().as(CreateErrorModel.class));
 
         step("Check response", ()-> {
